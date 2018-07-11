@@ -9,7 +9,7 @@
  */
 function site_url()
 {
-    return null;
+    return $SITE_URL;
 }
 
 /**
@@ -34,7 +34,8 @@ function d($valor)
 }
 
 /**
- * Valida o email
+ * Valida o email.
+ * Através de expressões regulares do PHP.
  */
 function validarEmail($email) {
     $conta = "/^[a-zA-Z0-9\._-]+@";

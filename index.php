@@ -1,4 +1,5 @@
 <?php
 include "config.php";
 ?>
-<h1>Index do site</h1>
+
+<h1>Index do projeto-aula-php</h1>
