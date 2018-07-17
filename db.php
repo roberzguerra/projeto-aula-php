@@ -32,7 +32,6 @@ function insert_db($sql)
 {
     try {
         $conn = connect_db();
-        $inserido = false;
         if ($conn->exec($sql) === 1) {
             return $conn->lastInsertId();
         }
