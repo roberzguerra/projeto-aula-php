@@ -71,12 +71,11 @@
 
 	<div class="card">
 		<div class="card-header">
-        	<i class="fa fa-user"></i> Cadastro de Pessoa
+        	<i class="fa fa-user"></i> Cadastro de Cidade
 		</div>
 
 		<div class="card-body">
-
-			<form action="<?php echo $SITE_URL . "/modulo-pessoa/cadastro-pessoa.php"; ?>" id="form-cadastro" method="POST">
+			<form action="<?php echo $SITE_URL . "/modulo-cidade/cadastro-cidade.php"; ?>" id="form-cadastro" method="POST">
 
 				<div class="form-group">
 					<div class="form-row ">

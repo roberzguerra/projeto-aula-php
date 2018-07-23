@@ -53,6 +53,7 @@ function validarFormularioSimples($post)
 
 // Busca todos os UFs (estados) do banco 
 $listaUf = select_db("SELECT id, nome, sigla FROM uf;");
+dd($listaUf);
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
