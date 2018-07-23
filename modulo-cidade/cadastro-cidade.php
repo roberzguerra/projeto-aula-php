@@ -16,35 +16,12 @@ function validarFormularioSimples($post)
 {
     $listaErros = [];
 
-    if (!$post['nome']) {
+    if (!isset($post['nome']) || !$post['nome'] ) {
         $listaErros['nome'] = "Nome obrigatório.";
     }
 
-    if (!$post['email']) {
-        $listaErros['email'] = "Email obrigatório.";
-    } else if ( !validarEmail($post['email']) ) {
-        $listaErros['email'] = "Informe um email válido.";
-    }
-
-    if (!$post['sexo']) {
-        $listaErros['sexo'] = "Selecione um sexo.";
-
-    } else if ( !in_array($post['sexo'], ['M', 'F']) ) {
-        // o IF acima equivale ao IF comentado abaixo
-        // if ($post['sexo'] != 'M' && $post['sexo'] != 'F' )
-        $listaErros['sexo'] = "Selecione Masculino ou Feminino.";
-    }
-    
-    if (!$post['data_nascimento']) {
-        $listaErros['data_nascimento'] = "Data de nascimento obrigatória.";
-    }
-
-    if (!$post['uf']) {
+    if ( !isset($post['uf']) || !$post['uf'] ) {
         $listaErros['uf'] = "Estado obrigatório.";
-    }
-
-    if (!$post['cidade']) {
-        $listaErros['cidade'] = "Cidade obrigatória.";
     }
 
     return $listaErros;
@@ -53,7 +30,6 @@ function validarFormularioSimples($post)
 
 // Busca todos os UFs (estados) do banco 
 $listaUf = select_db("SELECT id, nome, sigla FROM uf;");
-dd($listaUf);
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
