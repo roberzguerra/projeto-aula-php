@@ -32,6 +32,8 @@ function error_db($e) {
 
 /**
  * Método para inserir dados.
+ * Caso execute o insert corretamente, retorna o valor do ultimo
+ * ID inserido no banco.
  */
 function insert_db($sql)
 {

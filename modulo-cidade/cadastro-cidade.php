@@ -31,6 +31,7 @@ function validarFormularioSimples($post)
 // Busca todos os UFs (estados) do banco 
 $listaUf = select_db("SELECT id, nome, sigla FROM uf;");
 
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
     include "cadastro-view.php";
@@ -44,8 +45,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     if (count($listaErros) > 0) {
         include "cadastro-view.php";
+    } else {
+        
+        
+
+        $sql = "INSERT INTO cidade (nome, uf_id) 
+            VALUES('" . $_POST['nome'] . "', " . $_POST['uf'] . ");";
+
+        $cidadeId = insert_db($sql);
+
+        // Variaveis para controle de erros.
+        $mensagemSucesso = '';
+        $mensagemErro = '';
+
+        if ($cidadeId) {
+            $mensagemSucesso = "Cidade cadastrada com sucesso.";
+        } else {
+            $mensagemErro = "Erro inesperado.";
+        }
+        include "cadastro-view.php";
+        
     }
-    
 }
 
 
