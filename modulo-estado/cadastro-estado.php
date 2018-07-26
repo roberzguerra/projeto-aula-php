@@ -65,16 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $sql = "INSERT INTO uf (nome, sigla)
             VALUES ('{$_POST['nome']}', '{$sigla}');";
 
-        dd($sql);
-
-        $cidadeId = insert_db($sql);
+        $estadoId = insert_db($sql);
 
         // Variaveis para controle de erros.
         $mensagemSucesso = '';
         $mensagemErro = '';
 
-        if ($cidadeId) {
-            $mensagemSucesso = "Cidade cadastrada com sucesso.";
+        if ($estadoId) {
+            $mensagemSucesso = "Estado cadastrado com sucesso.";
         } else {
             $mensagemErro = "Erro inesperado.";
         }
