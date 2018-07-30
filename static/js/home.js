@@ -1,4 +1,16 @@
 
+function deletarRegistro(btn) {
+
+    console.log('btn: ', btn);
+    btn = $(btn);
+    var mensagem = btn.attr('data-delete-message');
+    var url = btn.attr('data-delete-url');
+
+    if( confirm(mensagem)  ) {
+        window.location.href = url;
+    }
+};
+
 
 function trocarCidades() {
     console.log("trocarCidades");

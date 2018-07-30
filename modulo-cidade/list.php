@@ -10,6 +10,25 @@ include '../comum/side-menu.php';
 	include "../comum/migalhas.php";
 	?>
 
+    <?php
+    if ($mensagemSucesso) {
+        ?>
+        <div class="alert alert-success">
+            <?php echo $mensagemSucesso; ?>
+        </div>
+        <?php
+    }
+
+    if ($listaErros) {
+        ?>
+        <div class="alert alert-danger">
+            <?php echo exibirErro($listaErros, 'delete'); ?>
+        </div>
+        <?php
+    }
+    
+    ?>
+
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -27,8 +46,8 @@ include '../comum/side-menu.php';
                     <td><?php echo "{$cidade->uf_nome} ({$cidade->uf_sigla})"; ?></td>
                     <td>
                         <button class="btn btn-primary">Editar</button>
-                        <button class="btn btn-danger">
-                            <i class="fa fa-close"></i>
+                        <button class="btn btn-danger" data-delete-message="<?php echo "Deseja deletar a cidade {$cidade->cidade_nome} ?"; ?>" data-delete-url="<?php echo "/modulo-cidade?delete=1&id={$cidade->cidade_id}"; ?>"  onclick="deletarRegistro(this);">
+                            <i class="fa fa-remove"></i>
                         </button>
                     </td>
                 </tr>
@@ -38,6 +57,19 @@ include '../comum/side-menu.php';
 
     </div>
 </div>
+
+
+<script type="text/javascript">
+/*
+function deletarRegistro(id) {
+
+    var ok = confirm("Deseja deletar o registro ID = " + id + " ?");
+    if (ok) {
+        window.location.href = "/modulo-cidade?delete=1&id=" + id;
+    }
+}
+*/
+</script>
 <?php
 include "../comum/footer.php";
 ?>

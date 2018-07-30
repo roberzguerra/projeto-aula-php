@@ -49,4 +49,15 @@ function validarEmail($email) {
     return false;
 }
 
+/**
+ * Exibe erros de um array pegando pela chave.
+ */
+function exibirErro($listaErros, $chave)
+{
+    if ( isset($listaErros[$chave]) && $listaErros[$chave]) {
+        return '<span class="text-danger">' . $listaErros[$chave] . '</span>';
+    }
+    return '';
+}
+
 ?>
