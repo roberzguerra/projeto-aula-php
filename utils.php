@@ -60,4 +60,18 @@ function exibirErro($listaErros, $chave)
     return '';
 }
 
+function deletarRegistro($id, $tableName) {
+    // String do SQL utilizando chaves ({}) para concatenar.
+    //$lista = select_db("SELECT id, nome FROM {$tableName} WHERE id = {$id}");
+
+    // String do SQL utilizando ponto (.) para concatenar.
+    $retorno = false;
+    $lista = select_db("SELECT id, nome FROM " . $tableName . " WHERE id = " . $id);
+    if (count($lista) > 0 && $lista[0]->id) {
+
+        $retorno = delete_db("DELETE FROM {$tableName} WHERE id = {$id}");
+    }
+    return $retorno;
+}
+
 ?>
