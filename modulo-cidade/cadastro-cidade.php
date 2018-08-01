@@ -26,7 +26,15 @@ $listaUf = select_db("SELECT id, nome, sigla FROM uf;");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
+
+    if (isset($_GET['edit']) && isset($_GET['id']) 
+        && $_GET['edit'] == '1' && $_GET['id']) {
+
+            $cidade = select_one_db("SELECT id, nome, uf_id FROM cidade WHERE id={$_GET['id']}");
+        }
+
     include "cadastro-view.php";
+
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo "Formulario enviado <br>";
@@ -35,11 +43,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = validarFormularioSimples($_POST);
     //$listaErros = validarFormularioAvancado($_POST, ['nome', 'email']);
 
+    if (isset($_POST['id']) && $_POST['id'] )  {
+        $cidade = select_one_db("SELECT id, nome, uf_id FROM cidade WHERE id = {$_POST['id']}");
+    }
+
     if (count($listaErros) > 0) {
         include "cadastro-view.php";
+
+    } else if (isset($_POST['id']) && $_POST['id'] ) {
+        
+        // Executo o update
+        $sql = "UPDATE cidade 
+            SET nome = '{$_POST['nome']}', 
+            uf_id = {$_POST['uf']}
+            WHERE id = {$_POST['id']};
+        ";
+        $alterado = update_db($sql);
+
+        dd($alterado);
+    
     } else {
-        
-        
+        // Executa o insert
 
         $sql = "INSERT INTO cidade (nome, uf_id) 
             VALUES('" . $_POST['nome'] . "', " . $_POST['uf'] . ");";

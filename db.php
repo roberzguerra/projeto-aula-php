@@ -26,8 +26,10 @@ function connect_db()
     return $conn;
 }
 
-function error_db($e) {
-    echo '<pre>' . $sql . "<br>" . $e->getMessage() . '</pre>';
+function error_db($e, $sql) {
+    echo "<div style='color: red !important; background-color: #FFF !important;'> ERRO NO BANCO DE DADOS:<br>";
+    echo 'SQL: <pre>' . $sql . "<br> ERRO: " . $e->getMessage() . '</pre>';
+    echo "</div>";
 }
 
 /**
@@ -43,7 +45,7 @@ function insert_db($sql)
             return $conn->lastInsertId();
         }
     } catch (PDOException $e) {
-        error_db($e);
+        error_db($e, $sql);
     }
     return false;
 }
@@ -58,7 +60,21 @@ function select_db($sql)
         $result = $select->setFetchMode(PDO::FETCH_OBJ); 
         return $select->fetchAll();
     } catch(PDOException $e) {
-        error_db($e);
+        error_db($e, $sql);
+    }
+    return false;
+}
+
+function select_one_db($sql)
+{
+    try {
+        $conn = connect_db();
+        $select = $conn->prepare($sql); 
+        $select->execute();
+        $result = $select->setFetchMode(PDO::FETCH_OBJ); 
+        return $select->fetch();
+    } catch(PDOException $e) {
+        error_db($e, $sql);
     }
     return false;
 }
@@ -73,7 +89,7 @@ function delete_db($sql)
             return true;
         }
     } catch(PDOException $e) {
-        error_db($e);
+        error_db($e, $sql);
     }
     return false;
 }
@@ -90,7 +106,7 @@ function update_db($sql)
         }
     
     } catch(PDOException $e) {
-        error_db($e);
+        error_db($e, $sql);
     }
     return false;
 }

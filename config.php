@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // Inclui arquivo de configuração e metodos de conexão com banco de dados.
 include 'db.php';
