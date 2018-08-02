@@ -60,7 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         ";
         $alterado = update_db($sql);
 
-        dd($alterado);
+        //$_SESSION['msg_sucesso'] = "Cidade {$_POST['nome']} alterada com sucesso.";
+
+        $_SESSION['msg_sucesso'] = [
+            'title' => 'Sucesso.',
+            'icon' => 'fa fa-warning',
+            'message' => "Cidade {$_POST['nome']} alterada com sucesso.",
+        ];
+
+        redirect("/modulo-cidade/");
     
     } else {
         // Executa o insert
