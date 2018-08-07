@@ -1,14 +1,6 @@
 <?php
 include '../config.php';
 
-function exibirErro($listaErros, $chave)
-{
-    if ( isset($listaErros[$chave]) && $listaErros[$chave]) {
-        return '<span class="text-danger">' . $listaErros[$chave] . '</span>';
-    }
-    return '';
-}
-
 /**
  * Valida se a $sigla recebida eh string de A-Z ou a-z e somente
  * 2 caracateres
@@ -49,6 +41,12 @@ function validarFormularioSimples($post)
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
+
+    if (isset($_GET['edit']) && $_GET['edit'] == 1
+        && isset($_GET['id']) && $_GET['id']) {
+            $uf = select_one_db("SELECT id, nome, sigla FROM uf WHERE id = {$_GET['id']};");
+        }
+
     include "cadastro-view.php";
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -57,8 +55,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = validarFormularioSimples($_POST);
     //$listaErros = validarFormularioAvancado($_POST, ['nome', 'email']);
 
+    if (isset($_POST['id']) && $_POST['id'] )  {
+        $uf = select_one_db("SELECT id, nome, sigla FROM uf WHERE id = {$_POST['id']}");
+    }
+
     if (count($listaErros) > 0) {
         include "cadastro-view.php";
+
+    } else if (isset($_POST['id']) && $_POST['id']) {
+
+        $sigla = strtoupper($_POST['sigla']);
+        // Executo o update
+        $sql = "UPDATE uf 
+            SET nome = '{$_POST['nome']}', 
+            sigla = '{$sigla}'
+            WHERE id = {$_POST['id']};
+        ";
+        $alterado = update_db($sql);
+
+        //$_SESSION['msg_sucesso'] = "Cidade {$_POST['nome']} alterada com sucesso.";
+
+        alertSuccess("Sucesso.", "Estado {$_POST['nome']} alterado com sucesso.");
+        
+        redirect("/modulo-estado/");
+        
     } else {
 
         $sigla = strtoupper($_POST['sigla']);

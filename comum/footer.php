@@ -36,7 +36,7 @@
 <?php /* SCRIPTS FINAIS */ ?>
 
 <?php 
-/* SCRIPTS DO NOTIFY */
+/* SCRIPTS DO NOTIFY para exibir mensagens de sucesso */
 if (isset($_SESSION['msg_sucesso']) && $_SESSION['msg_sucesso']) {
   ?>
   <script type="text/javascript">
@@ -50,6 +50,22 @@ if (isset($_SESSION['msg_sucesso']) && $_SESSION['msg_sucesso']) {
   </script>
   <?php
   unset($_SESSION['msg_sucesso']);
+}
+
+/* SCRIPTS DO NOTIFY */
+if (isset($_SESSION['msg_erro']) && $_SESSION['msg_erro']) {
+  ?>
+  <script type="text/javascript">
+    $.notify(
+      <?php echo json_encode($_SESSION['msg_erro']); ?>
+    ,{
+      // settings
+      type: 'danger',
+      delay: 3000
+    });
+  </script>
+  <?php
+  unset($_SESSION['msg_erro']);
 }
 
 ?>

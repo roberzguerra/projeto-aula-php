@@ -14,6 +14,12 @@
                     <span class="nav-link-text">Cidades</span>
                 </a>
             </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                <a class="nav-link" href="/modulo-estado/">
+                    <i class="fa fa-fw fa-list"></i>
+                    <span class="nav-link-text">Estado</span>
+                </a>
+            </li>
         </ul>
 
         <ul class="navbar-nav sidenav-toggler">

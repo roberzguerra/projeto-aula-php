@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo "Formulario enviado <br>";
     
     // Utilizem o metodo validarFormularioSimples OU validarFormularioAvancado
     $listaErros = validarFormularioSimples($_POST);
