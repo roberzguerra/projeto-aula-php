@@ -40,13 +40,7 @@
 if (isset($_SESSION['msg_sucesso']) && $_SESSION['msg_sucesso']) {
   ?>
   <script type="text/javascript">
-    $.notify(
-      <?php echo json_encode($_SESSION['msg_sucesso']); ?>
-    ,{
-      // settings
-      type: 'success',
-      delay: 3000
-    });
+    exibirAlerta(<?php echo json_encode($_SESSION['msg_sucesso']); ?>);
   </script>
   <?php
   unset($_SESSION['msg_sucesso']);
@@ -56,13 +50,7 @@ if (isset($_SESSION['msg_sucesso']) && $_SESSION['msg_sucesso']) {
 if (isset($_SESSION['msg_erro']) && $_SESSION['msg_erro']) {
   ?>
   <script type="text/javascript">
-    $.notify(
-      <?php echo json_encode($_SESSION['msg_erro']); ?>
-    ,{
-      // settings
-      type: 'danger',
-      delay: 3000
-    });
+    exibirAlerta(<?php echo json_encode($_SESSION['msg_erro']); ?>);
   </script>
   <?php
   unset($_SESSION['msg_erro']);

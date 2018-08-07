@@ -77,12 +77,26 @@ function redirect($url)
 }
 
 
-function alertSuccess($titulo, $mensagem, $icone='fa fa-warning') {
+function alertSuccess($titulo, $mensagem, $delay=3000, $icone='fa fa-warning') {
     $_SESSION['msg_sucesso'] = [
         'title' => $titulo,
         'icon' => $icone,
         'message' => $mensagem,
+        'type' => "success",
+        'delay' => $delay,
     ];
 }
+
+function alertError($titulo, $mensagem, $delay=3000, $icone='fa fa-warning') {
+    $_SESSION['msg_erro'] = [
+        'title' => $titulo,
+        'icon' => $icone,
+        'message' => $mensagem,
+        'type' => "danger",
+        'delay' => $delay,
+    ];
+}
+
+
 
 ?>

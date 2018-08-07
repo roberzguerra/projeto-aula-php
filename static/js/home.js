@@ -47,6 +47,24 @@ $(document).ready(function(){
 
 });
 
+/**
+ * Parametros recebidos pelo option:
+ * title,
+ * icon,
+ * message,
+ * type,
+ * delay
+ */
+function exibirAlerta(options) {
 
-
-
+    $.notify(
+        {
+            title: options.title,
+            icon: options.icon,
+            message: options.message
+        },{
+        // settings
+        type: options.type,
+        delay: options.delay
+      });
+}
