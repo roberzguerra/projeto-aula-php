@@ -28,7 +28,7 @@
 <script src="<?php echo $SITE_URL . "/static/vendor/jquery/jquery.min.js"; ?>"></script>
 <script src="<?php echo $SITE_URL . "/static/vendor/bootstrap/js/bootstrap.bundle.min.js"; ?>"></script>
 <script src="<?php echo $SITE_URL . "/static/vendor/jquery-easing/jquery.easing.min.js"; ?>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+<script src="<?php echo $SITE_URL . "/static/vendor/jquery.mask.min.js"; ?>"></script>
 <script src="<?php echo $SITE_URL . "/static/js/sb-admin.min.js"; ?>"></script>
 <script src="<?php echo $SITE_URL . "/static/vendor/bootstrap-notify.js" ?>"></script>
 <script src="<?php echo $SITE_URL . "/static/js/home.js"; ?> "></script>
