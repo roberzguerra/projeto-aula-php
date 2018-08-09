@@ -1,13 +1,18 @@
 <?php
 include '../config.php';
 
-function exibirErro($listaErros, $chave)
-{
-    if ( isset($listaErros[$chave]) && $listaErros[$chave]) {
-        return '<span class="text-danger">' . $listaErros[$chave] . '</span>';
+/**
+ * Valida se a $sigla recebida eh string de A-Z ou a-z e somente
+ * 2 caracateres
+ */
+function validarSigla($sigla) {
+    $padrao = "/^([a-zA-Z]{2})$/";
+    if (preg_match($padrao, $sigla)) {
+        return true;
     }
-    return '';
+    return false;
 }
+
 
 /**
  * Valida formulario simples
@@ -16,95 +21,84 @@ function validarFormularioSimples($post)
 {
     $listaErros = [];
 
-    if (!$post['nome']) {
+    if (!isset($post['nome']) || !$post['nome'] ) {
         $listaErros['nome'] = "Nome obrigatório.";
     }
 
-    if (!$post['email']) {
-        $listaErros['email'] = "Email obrigatório.";
-    } else if ( !validarEmail($post['email']) ) {
-        $listaErros['email'] = "Informe um email válido.";
-    }
 
-    if (!isset($post['sexo']) || !$post['sexo']) {
-        $listaErros['sexo'] = "Selecione um sexo.";
+    if (!isset($post['sigla']) || !$post['sigla']) {
+    // o codigo abaixo é igual ao if acima
+    // if (isset($post['sigla']) == false || $post['sigla'] == false) {
 
-    } else if ( !in_array($post['sexo'], ['M', 'F']) ) {
-        // o IF acima equivale ao IF comentado abaixo
-        // if ($post['sexo'] != 'M' && $post['sexo'] != 'F' )
-        $listaErros['sexo'] = "Selecione Masculino ou Feminino.";
-    }
-    
-    if (!$post['data_nascimento']) {
-        $listaErros['data_nascimento'] = "Data de nascimento obrigatória.";
-    }
+        $listaErros['sigla'] = "Informe a sigla do estado.";        
 
-    if (!$post['uf']) {
-        $listaErros['uf'] = "Estado obrigatório.";
-    }
-
-    if (!$post['cidade']) {
-        $listaErros['cidade'] = "Cidade obrigatória.";
-    }
-
+    } else if ( !validarSigla($post['sigla']) ) {
+        $listaErros['sigla'] = "Informe uma sigla com duas letras.";
+    } 
     return $listaErros;
 }
 
-
-/**
- * Recebe o array $post contendo osvalores do $_POST,
- * e um array contendo as chaves do array $post
- */
-function validarFormularioAvancado($post, $chaves)
-{
-    $listaErros = [];
-
-    foreach($chaves as $chave) {
-        $valido = false;
-
-        if (isset($post[$chave])) {
-            if ($post[$chave]) {
-                $valido = true;
-            }
-        }
-        if (!$valido) {
-          $listaErros[$chave] = "Campo obrigatório.";
-        }
-    }
-    return $listaErros;
-}
-
-// Busca todos os UFs (estados) do banco 
-$listaUf = select_db("SELECT id, nome, sigla FROM uf;");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
+
+    if (isset($_GET['edit']) && $_GET['edit'] == 1
+        && isset($_GET['id']) && $_GET['id']) {
+            $uf = select_one_db("SELECT id, nome, sigla FROM uf WHERE id = {$_GET['id']};");
+        }
+
     include "cadastro-view.php";
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo "Formulario enviado <br>";
     
     // Utilizem o metodo validarFormularioSimples OU validarFormularioAvancado
     $listaErros = validarFormularioSimples($_POST);
     //$listaErros = validarFormularioAvancado($_POST, ['nome', 'email']);
 
+    if (isset($_POST['id']) && $_POST['id'] )  {
+        $uf = select_one_db("SELECT id, nome, sigla FROM uf WHERE id = {$_POST['id']}");
+    }
+
     if (count($listaErros) > 0) {
         include "cadastro-view.php";
+
+    } else if (isset($_POST['id']) && $_POST['id']) {
+
+        $sigla = strtoupper($_POST['sigla']);
+        // Executo o update
+        $sql = "UPDATE uf 
+            SET nome = '{$_POST['nome']}', 
+            sigla = '{$sigla}'
+            WHERE id = {$_POST['id']};
+        ";
+        $alterado = update_db($sql);
+
+        //$_SESSION['msg_sucesso'] = "Cidade {$_POST['nome']} alterada com sucesso.";
+
+        alertSuccess("Sucesso.", "Estado {$_POST['nome']} alterado com sucesso.");
+        
+        redirect("/modulo-estado/");
+        
+    } else {
+
+        $sigla = strtoupper($_POST['sigla']);
+        $sql = "INSERT INTO uf (nome, sigla)
+            VALUES ('{$_POST['nome']}', '{$sigla}');";
+
+        $estadoId = insert_db($sql);
+
+        // Variaveis para controle de erros.
+        $mensagemSucesso = '';
+        $mensagemErro = '';
+
+        if ($estadoId) {
+            $mensagemSucesso = "Estado cadastrado com sucesso.";
+        } else {
+            $mensagemErro = "Erro inesperado.";
+        }
+        include "cadastro-view.php";
+        
     }
-    
-    echo $_POST['nome'];
-    echo "<br>";
-    /*
-    echo $_POST['email'];
-    echo '<br>';
-    echo $_POST['sexo'];
-    echo '<br>';
-    echo $_POST['data_nascimento'];
-    echo '<br>';
-    echo $_POST['uf'];
-    echo '<br>';
-    echo $_POST['cidade'];
-    */
 }
 
 
