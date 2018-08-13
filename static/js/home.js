@@ -66,5 +66,6 @@ function exibirAlerta(options) {
         // settings
         type: options.type,
         delay: options.delay
-      });
+    });
 }
+
