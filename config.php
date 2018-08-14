@@ -1,5 +1,11 @@
 <?php
 session_start();
+// Define o idioma padrão do PHP para Portugues do Brasil
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+
+// define o timezone (fuso horario) padrao do sistema, para o PHP.
+date_default_timezone_set('America/Sao_Paulo');
+
 
 // Inclui arquivo de configuração e metodos de conexão com banco de dados.
 include 'db.php';
