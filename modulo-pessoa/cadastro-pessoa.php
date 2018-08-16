@@ -1,5 +1,11 @@
 <?php
 include '../config.php';
+/*
+// Manipulando datas com DateTime:
+$data = DateTime::createFromFormat('d/m/Y H:i:s', '10/08/1990 00:00:00');
+dd($data->format('Y-m-d H:i:s.u'));
+*/
+
 
 /**
  * Valida formulario simples
@@ -58,6 +64,7 @@ function validarFormulario($post)
     return $listaErros;
 }
 
+$listaUfs = select_db("SELECT id, nome, sigla FROM uf ORDER BY nome ASC;");
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];

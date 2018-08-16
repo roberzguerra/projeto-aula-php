@@ -97,6 +97,17 @@ function alertError($titulo, $mensagem, $delay=3000, $icone='fa fa-warning') {
     ];
 }
 
-
+/**
+ * Verifica se a requisição é Ajax.
+ * Se for Ajax retorna true.
+ * Se não retorna false.
+ */
+function checkAjax() {
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
+        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        return true;
+    }
+    return false;
+  }
 
 ?>
