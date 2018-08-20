@@ -58,8 +58,8 @@ function validarFormulario($post)
         }
     }
 
-    if (isset($_POST['cpf']) && $_POST['cpf']) {
-        $cpfSemMascara = removerMascaraCpf($_POST['cpf']);
+    if (isset($post['cpf']) && $post['cpf']) {
+        $cpfSemMascara = removerMascaraCpf($post['cpf']);
         $resultado = select_one_db("SELECT COUNT(id) FROM pessoa WHERE cpf='{$cpfSemMascara}';");
         if ($resultado->count > 0) {
             $listaErros['cpf'] = "CPF já cadastrado.";
