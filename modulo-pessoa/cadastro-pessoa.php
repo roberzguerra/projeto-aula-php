@@ -47,7 +47,7 @@ function validarFormulario($post)
         $listaErros['cpf'] = "CPF inválido.";
     }
 
-    if ( !isset($listaErros['email']) && $post['email'] && validarEmail($post['email'])) {
+    if ( !isset($listaErros['email']) && $post['email'] && !validarEmail($post['email'])) {
         $listaErros['email'] = "Email inválido.";
     }
 
@@ -58,8 +58,13 @@ function validarFormulario($post)
         }
     }
 
-
-
+    if (isset($_POST['cpf']) && $_POST['cpf']) {
+        $cpfSemMascara = removerMascaraCpf($_POST['cpf']);
+        $resultado = select_one_db("SELECT COUNT(id) FROM pessoa WHERE cpf='{$cpfSemMascara}';");
+        if ($resultado->count > 0) {
+            $listaErros['cpf'] = "CPF já cadastrado.";
+        }
+    }
 
     return $listaErros;
 }
@@ -100,28 +105,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         ";
         $alterado = update_db($sql);
 
-        //$_SESSION['msg_sucesso'] = "Cidade {$_POST['nome']} alterada com sucesso.";
-
         alertSuccess("Sucesso.", "Estado {$_POST['nome']} alterado com sucesso.");
         
         redirect("/modulo-estado/");
         
     } else {
 
-        $sigla = strtoupper($_POST['sigla']);
-        $sql = "INSERT INTO uf (nome, sigla)
-            VALUES ('{$_POST['nome']}', '{$sigla}');";
+        $cpfSemMascara = removerMascaraCpf($_POST['cpf']);
 
-        $estadoId = insert_db($sql);
+        $dataNascimento = DateTime::createFromFormat('d/m/Y', $_POST['data_nascimento']);
+        $dataNascimentoBanco = $dataNascimento->format('Y-m-d') . ' 00:00:00';
+
+        $sql = "INSERT INTO pessoa (
+            primeiro_nome,
+            segundo_nome,
+            email,
+            cpf,
+            data_nascimento,
+            tipo,
+            endereco,
+            cep,
+            bairro,
+            numero,
+            cidade_id
+        ) VALUES (
+            '{$_POST['primeiro_nome']}',
+            '{$_POST['segundo_nome']}',
+            '{$_POST['email']}',
+            '{$cpfSemMascara}',
+            '{$dataNascimentoBanco}',
+            {$_POST['tipo']},
+            '{$_POST['endereco']}',
+            '{$_POST['cep']}',
+            '{$_POST['bairro']}',
+            '{$_POST['numero']}',
+            {$_POST['cidade']}
+        );";
+        
+        $pessoaId = insert_db($sql);
 
         // Variaveis para controle de erros.
         $mensagemSucesso = '';
         $mensagemErro = '';
 
-        if ($estadoId) {
-            $mensagemSucesso = "Estado cadastrado com sucesso.";
+        if ($pessoaId) {
+            alertSuccess("Sucesso.", "Pessoa {$_POST['nome']} acadastrado com sucesso.");
         } else {
-            $mensagemErro = "Erro inesperado.";
+            alertError("Erro.", "Erro ao cadastrar pessoa.");
         }
         include "cadastro-view.php";
         
