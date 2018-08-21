@@ -154,4 +154,26 @@ function validarCpf($cpf)
         return true;
     }
 }
+
+/**
+ * Escapa todas as aspas simples (') e duplas (") da string 
+ *  recebida no parametro $valor.
+ */
+function filtrarSql($valor) {
+
+    $valor = str_replace("'", "\'", $valor);
+    $valor = str_replace('"', '\"', $valor);
+    return $valor;
+}
+
+/**
+ * Percorre todas as chaves do $_POST para executar o metodo filtrarSql.
+ */
+function formatarPost($post) {
+
+    foreach($post as $chave => $valor) {
+        $post[$chave] = filtrarSql($valor);
+    }
+    return $post;
+}
 ?>

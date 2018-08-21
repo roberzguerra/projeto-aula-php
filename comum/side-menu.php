@@ -20,6 +20,12 @@
                     <span class="nav-link-text">Estado</span>
                 </a>
             </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                <a class="nav-link" href="/modulo-pessoa/">
+                    <i class="fa fa-fw fa-user"></i>
+                    <span class="nav-link-text">Pessoa</span>
+                </a>
+            </li>
         </ul>
 
         <ul class="navbar-nav sidenav-toggler">

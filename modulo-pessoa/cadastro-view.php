@@ -230,27 +230,9 @@ $(document).ready(function(){
 				if (options > 0) {
 					selectCidade.find('option:first').html('Selecione');
 				}
-
-				
-				selectCidade.val('1');
 			});
-
-			
-
 		}
 	});
 
-
-	// Preencher campos automaticamente para testes:
-	$("#primeiro_nome").val('Rober');
-	$("#segundo_nome").val('Guerra');
-	$("#cpf").val('276.977.020-96');
-	$("#email").val('rober.guerra@email.com');
-	$('#data_nascimento').val('01/10/1990');
-	$('#endereco').val('Rua 1');
-	$('#bairro').val('Bairro 1');
-	$('#numero').val('1000');
-	$('#cep').val('95200-000');
-	$("#uf").val('21').change();
 });
 </script>

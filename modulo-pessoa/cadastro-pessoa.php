@@ -116,10 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         redirect("/modulo-estado/");
         
     } else {
+        $post = formatarPost($_POST);
 
-        $cpfSemMascara = removerMascaraCpf($_POST['cpf']);
+        $cpfSemMascara = removerMascaraCpf($post['cpf']);
 
-        $dataNascimento = DateTime::createFromFormat('d/m/Y', $_POST['data_nascimento']);
+        $dataNascimento = DateTime::createFromFormat('d/m/Y', $post['data_nascimento']);
         $dataNascimentoBanco = $dataNascimento->format('Y-m-d') . ' 00:00:00';
 
         $sql = "INSERT INTO pessoa (
@@ -135,17 +136,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             numero,
             cidade_id
         ) VALUES (
-            '{$_POST['primeiro_nome']}',
-            '{$_POST['segundo_nome']}',
-            '{$_POST['email']}',
+            '{$post['primeiro_nome']}',
+            '{$post['segundo_nome']}',
+            '{$post['email']}',
             '{$cpfSemMascara}',
             '{$dataNascimentoBanco}',
-            {$_POST['tipo']},
-            '{$_POST['endereco']}',
-            '{$_POST['cep']}',
-            '{$_POST['bairro']}',
-            '{$_POST['numero']}',
-            {$_POST['cidade']}
+            {$post['tipo']},
+            '{$post['endereco']}',
+            '{$post['cep']}',
+            '{$post['bairro']}',
+            '{$post['numero']}',
+            {$post['cidade']}
         );";
         
         $pessoaId = insert_db($sql);
