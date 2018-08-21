@@ -45,10 +45,23 @@ function validarFormulario($post)
 
     if ( !isset($listaErros['cpf']) && $post['cpf'] && !validarCpf($post['cpf'])) {
         $listaErros['cpf'] = "CPF inválido.";
+
+    } else if ($post['cpf']) {
+        $cpfSemMascara = removerMascaraCpf($post['cpf']);
+        $resultado = select_one_db("SELECT COUNT(id) AS count FROM pessoa WHERE cpf='{$cpfSemMascara}';");
+        if ($resultado->count > 0) {
+            $listaErros['cpf'] = "CPF já cadastrado.";
+        }
     }
 
     if ( !isset($listaErros['email']) && $post['email'] && !validarEmail($post['email'])) {
         $listaErros['email'] = "Email inválido.";
+    } else if ($post['email']) {
+        
+        $resultado = select_one_db("SELECT COUNT(id) AS count FROM pessoa WHERE email='{$post['email']}';");
+        if ($resultado->count > 0) {
+            $listaErros['email'] = "Email já cadastrado.";
+        }
     }
 
     if ( !isset($listaErros['data_nascimento']) && $post['data_nascimento']) {
@@ -58,13 +71,6 @@ function validarFormulario($post)
         }
     }
 
-    if (isset($post['cpf']) && $post['cpf']) {
-        $cpfSemMascara = removerMascaraCpf($post['cpf']);
-        $resultado = select_one_db("SELECT COUNT(id) FROM pessoa WHERE cpf='{$cpfSemMascara}';");
-        if ($resultado->count > 0) {
-            $listaErros['cpf'] = "CPF já cadastrado.";
-        }
-    }
 
     return $listaErros;
 }
@@ -144,20 +150,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         
         $pessoaId = insert_db($sql);
 
-        // Variaveis para controle de erros.
-        $mensagemSucesso = '';
-        $mensagemErro = '';
-
         if ($pessoaId) {
-            alertSuccess("Sucesso.", "Pessoa {$_POST['nome']} acadastrado com sucesso.");
+            alertSuccess("Sucesso.", "Pessoa {$_POST['primeiro_nome']} acadastrado com sucesso.");
         } else {
             alertError("Erro.", "Erro ao cadastrar pessoa.");
         }
         include "cadastro-view.php";
-        
     }
 }
-
-
 
 ?>
