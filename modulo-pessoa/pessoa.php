@@ -1,6 +1,7 @@
 <?php
+include "../comum/model_base.php";
 
-class Pessoa
+class Pessoa extends ModelBase
 {
     public $id;
     public $primeiro_nome;
@@ -68,17 +69,15 @@ class Pessoa
         return "{$this->primeiro_nome} {$this->segundo_nome}";
     }
 
-    public function setPost($post)
+    public function setPost($post) 
     {
-        foreach($post as $chave => $valor) {
+        parent::setPost($post);
 
-            if ($chave == 'data_nascimento') {
-                $this->data_nascimento = DateTime::createFromFormat('d/m/Y', $valor);
-            } else if($chave == 'cpf') {
-                $this->cpf = removerMascaraCpf($valor);
-            } else {
-                $this->{$chave} = $valor;
-            }
+        if (isset($post['data_nascimento'])) {
+            $this->data_nascimento = DateTime::createFromFormat('d/m/Y', $post['data_nascimento']);
+        }
+        if (isset($post['cpf'])) {
+            $this->cpf = removerMascaraCpf($post['cpf']);
         }
         if (isset($post['uf'])) {
             $this->uf_id = $post['uf'];
