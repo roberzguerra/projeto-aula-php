@@ -14,7 +14,7 @@ include "../comum/side-menu.php";
 		<div class="card-header">
         	<i class="fa fa-user"></i>
 			<?php if (isset($pessoa)) {
-				echo "Alterar pessoa: {$pessoa->nome}";
+				echo "Alterar pessoa: {$pessoa->getNomeCompleto()}";
 			} else {
 				echo "Cadastrar pessoa";
 			}
@@ -29,17 +29,17 @@ include "../comum/side-menu.php";
 				-->
 				<?php
 				
-				if (isset($pessoa)) { ?>
+				if ($pessoa->id) { ?>
 					<input type="hidden" name="id" value="<?php echo $pessoa->id; ?>" />
 				<?php } ?>
 
 				<div class="form-row ">
 					<div class="col-md-6">
 						<label for="tipo_professor">
-							<input name="tipo" id="tipo_professor" type="radio" value="1" > Professor
+							<input name="tipo" id="tipo_professor" type="radio" value="1" <?php echo ($pessoa->tipo == '1' ? 'checked' : '');?> > Professor
 						</label>
 						<label for="tipo_aluno">
-							<input name="tipo" id="tipo_aluno" type="radio" value="2" > Aluno
+							<input name="tipo" id="tipo_aluno" type="radio" value="2" <?php echo ($pessoa->tipo == '2' ? 'checked' : '');?> > Aluno
 						</label>
 						<br>
 						<?php echo exibirErro($listaErros, 'tipo'); ?>
@@ -50,12 +50,12 @@ include "../comum/side-menu.php";
 					<div class="form-row ">
 						<div class="col-md-6">
 							<label for="primeiro_nome">Primeiro nome</label>
-							<input class="form-control" name="primeiro_nome" id="primeiro_nome" placeholder="Primeiro nome" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->primeiro_nome : (isset($_POST['primeiro_nome']) ? $_POST['primeiro_nome'] : ''); ?>"  />
+							<input class="form-control" name="primeiro_nome" id="primeiro_nome" placeholder="Primeiro nome" type="text" value="<?php echo $pessoa->primeiro_nome; ?>"  />
 							<?php echo exibirErro($listaErros, 'primeiro_nome'); ?>
 						</div>
 						<div class="col-md-6">
 							<label for="segundo_nome">Sobrenome</label>
-							<input class="form-control" name="segundo_nome" id="segundo_nome" placeholder="Sobrenome" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->segundo_nome : ''; ?>"  />
+							<input class="form-control" name="segundo_nome" id="segundo_nome" placeholder="Sobrenome" type="text" value="<?php echo $pessoa->segundo_nome; ?>"  />
 							<?php echo exibirErro($listaErros, 'segundo_nome'); ?>
 						</div>
 					</div>
@@ -65,16 +65,16 @@ include "../comum/side-menu.php";
 					<div class="form-row ">
 						<div class="col-md-6">
 							<label for="cpf">CPF</label>
-							<input class="form-control" name="cpf" id="cpf" placeholder="___.___.___-__" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->cpf : ''; ?>"  />
+							<input class="form-control" name="cpf" id="cpf" placeholder="___.___.___-__" type="text" value="<?php echo $pessoa->cpf; ?>"  />
 							<?php echo exibirErro($listaErros, 'cpf'); ?>
 						</div>
 						<div class="col-md-6">
 							Sexo:<br>
 							<label for="sexo_masculino">
-								<input name="sexo" id="sexo_masculino" type="radio" value="M" /> Masculino
+								<input name="sexo" id="sexo_masculino" type="radio" value="M" <?php echo ($pessoa->sexo == 'M' ? 'checked' : ''); ?> /> Masculino
 							</label>
 							<label for="sexo_feminino">
-								<input name="sexo" id="sexo_feminino" type="radio" value="F" /> Feminino
+								<input name="sexo" id="sexo_feminino" type="radio" value="F" <?php echo ($pessoa->sexo == 'F' ? 'checked' : ''); ?> /> Feminino
 							</label>
 							<br>
 							<?php echo exibirErro($listaErros, 'sexo'); ?>
@@ -86,12 +86,12 @@ include "../comum/side-menu.php";
 					<div class="form-row">
 						<div class="col-md-6">
 							<label for="email">Email</label>
-							<input class="form-control" name="email" id="email" placeholder="email" type="email" value="<?php echo (isset($pessoa)) ? $pessoa->email : ''; ?>"  />
+							<input class="form-control" name="email" id="email" placeholder="email" type="email" value="<?php echo $pessoa->email; ?>"  />
 							<?php echo exibirErro($listaErros, 'email'); ?>
 						</div>
 						<div class="col-md-6">
 							<label for="data_nascimento">Data nascimento</label>
-							<input class="form-control datepicker" name="data_nascimento" id="data_nascimento" placeholder="__/__/____" type="text" autocomplete="disable" value="<?php echo (isset($pessoa)) ? $pessoa->data_nascimento : ''; ?>"  />
+							<input class="form-control datepicker" name="data_nascimento" id="data_nascimento" placeholder="__/__/____" type="text" autocomplete="disable" value="<?php echo $pessoa->getDataNascimentoFormatada(); ?>"  />
 							<?php echo exibirErro($listaErros, 'data_nascimento'); ?>
 						</div>
 					</div>				
@@ -101,12 +101,12 @@ include "../comum/side-menu.php";
 					<div class="form-row">
 						<div class="col-md-6">
 							<label for="endereco">Endereço</label>
-							<input class="form-control" name="endereco" id="endereco" placeholder="Rua, logradouro..." type="text" value="<?php echo (isset($pessoa)) ? $pessoa->endereco : ''; ?>"  />
+							<input class="form-control" name="endereco" id="endereco" placeholder="Rua, logradouro..." type="text" value="<?php echo$pessoa->endereco; ?>"  />
 							<?php echo exibirErro($listaErros, 'endereco'); ?>
 						</div>
 						<div class="col-md-6">
 							<label for="bairro">Bairro</label>
-							<input class="form-control" name="bairro" id="bairro" placeholder="Bairro" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->bairro : ''; ?>"  />
+							<input class="form-control" name="bairro" id="bairro" placeholder="Bairro" type="text" value="<?php echo $pessoa->bairro; ?>"  />
 							<?php echo exibirErro($listaErros, 'bairro'); ?>
 						</div>
 					</div>				
@@ -116,12 +116,12 @@ include "../comum/side-menu.php";
 					<div class="form-row">
 						<div class="col-md-6">
 							<label for="numero">Número</label>
-							<input class="form-control" name="numero" id="numero" placeholder="0000" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->numero : ''; ?>"  />
+							<input class="form-control" name="numero" id="numero" placeholder="0000" type="text" value="<?php echo $pessoa->numero; ?>"  />
 							<?php echo exibirErro($listaErros, 'numero'); ?>
 						</div>
 						<div class="col-md-6">
 							<label for="cep">Cep</label>
-							<input class="form-control" name="cep" id="cep" placeholder="_____-___" type="text" value="<?php echo (isset($pessoa)) ? $pessoa->cep : ''; ?>"  />
+							<input class="form-control" name="cep" id="cep" placeholder="_____-___" type="text" value="<?php echo $pessoa->cep; ?>"  />
 							<?php echo exibirErro($listaErros, 'cep'); ?>
 						</div>
 					</div>				
@@ -134,8 +134,13 @@ include "../comum/side-menu.php";
 							<select class="form-control" name="uf" id="uf">
 								<option value="">Selecione</option>
 								<?php 
+								
 								foreach($listaUfs as $uf) {
-									echo "<option value=\"{$uf->id}\">{$uf->nome} ({$uf->sigla})</option>";
+									$checked = '';
+									if (isset($pessoa) && $uf->id == $pessoa->uf_id) {
+										$checked = 'selected';
+									}
+									echo "<option {$checked} value=\"{$uf->id}\">{$uf->nome} ({$uf->sigla})</option>";
 								}
 								?>
 							</select>
@@ -177,6 +182,7 @@ include "../comum/footer.php";
 <!-- O JS abaixo é utilizado somente nesta tela -->
 <script type="text/javascript">
 $(document).ready(function(){
+
 	$('.datepicker').datepicker({
 		format: 'dd/mm/yyyy',
 		language: 'pt-BR'
@@ -192,8 +198,7 @@ $(document).ready(function(){
 
 		if (ufId) {
 			// Executa funcao Ajax para buscar todas as cidades do estado selecionado
-			
-
+		
 			var selectCidade = $('#cidade');
 			var options = '<option value=\"\">Selecione</option>';
 			selectUf.attr('disabled', true);
@@ -230,9 +235,20 @@ $(document).ready(function(){
 				if (options > 0) {
 					selectCidade.find('option:first').html('Selecione');
 				}
+
+				<?php
+				if (isset($pessoa) && $pessoa->cidade_id) {
+					?>
+					var cidadeId = "<?php echo $pessoa->cidade_id; ?>";
+					$("#cidade").val(cidadeId);
+					<?php
+				}
+				?>
+
 			});
 		}
-	});
+	}).change();
+
 
 });
 </script>

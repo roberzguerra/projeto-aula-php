@@ -61,23 +61,66 @@ include '../comum/side-menu.php';
         </tbody>
     </table>
 
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <?php
+                $pagina += 1;
+                $paginaAnterior = 0;
+                if($pagina > 1){
+                    $paginaAnterior = $pagina - 1;
+                    //echo "<a href=\"?p={$paginaAnterior}\">Anterior</a>";
+                }
+             ?>
+             <li class="<?php echo ($pagina <= 1) ? 'disabled':''; ?>">
+                <a href="?p=<?php echo $paginaAnterior;?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <!--
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            -->
+            <li class="active"><a><?php echo $pagina; ?></a></li>
+            <!--
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            -->
+            <?php
+            $proximaPagina = 0;
+            if($pagina <= $total) {
+                $proximaPagina = $pagina + 1;
+            }
+            ?>
+            <li class="<?php echo ($pagina > $total) ? 'disabled':''; ?>">
+                <a href="?p=<?php echo $proximaPagina; ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+
     <div>
         <?php
         // Exibe os links Anterior - PaginaAtual - Proximo
         // na tela.
+        /*
         $pagina += 1;
         if($pagina > 1){
             $paginaAnterior = $pagina - 1;
             echo "<a href=\"?p={$paginaAnterior}\">Anterior</a>";
 
         }
+        */
         // Exibe a pagina atual.
-        echo " - {$pagina} - ";
-
+        //echo " - {$pagina} - ";
+        
+        /*
         if($pagina <= $total) {
             $proximaPagina = $pagina + 1;
             echo "<a href=\"?p={$proximaPagina}\">Próximo</a>";
         }
+        */
         ?>
     </div>
 

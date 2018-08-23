@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['p']) && $_GET['p']) {
         $pagina = $_GET['p'] - 1;
     }
-    $limite = 3;
+    $limite = 2;
     $offset = $pagina * $limite;
   
     // Busca total de registros da tabela pessoa

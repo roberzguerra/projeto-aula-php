@@ -1,5 +1,6 @@
 <?php
 include '../config.php';
+include "pessoa.php";
 /*
 // Manipulando datas com DateTime:
 $data = DateTime::createFromFormat('d/m/Y H:i:s', '10/08/1990 00:00:00');
@@ -48,7 +49,21 @@ function validarFormulario($post)
 
     } else if ($post['cpf']) {
         $cpfSemMascara = removerMascaraCpf($post['cpf']);
-        $resultado = select_one_db("SELECT COUNT(id) AS count FROM pessoa WHERE cpf='{$cpfSemMascara}';");
+
+        $where = '';
+        if (isset($post['id']) && $post['id']) {
+            $where = "AND pessoa.id<>{$post['id']}";
+        }
+
+        $resultado = select_one_db("
+            SELECT 
+                COUNT(id) AS count 
+            FROM 
+                pessoa 
+            WHERE 
+                cpf='{$cpfSemMascara}'
+                $where;
+            ");
         if ($resultado->count > 0) {
             $listaErros['cpf'] = "CPF já cadastrado.";
         }
@@ -58,7 +73,20 @@ function validarFormulario($post)
         $listaErros['email'] = "Email inválido.";
     } else if ($post['email']) {
         
-        $resultado = select_one_db("SELECT COUNT(id) AS count FROM pessoa WHERE email='{$post['email']}';");
+        $where = '';
+        if (isset($post['id']) && $post['id']) {
+            $where = " AND id <> {$post['id']}";
+        }
+
+        $resultado = select_one_db("
+            SELECT 
+                COUNT(id) AS count 
+            FROM 
+                pessoa 
+            WHERE 
+                email='{$post['email']}'
+                $where
+            ;");
         if ($resultado->count > 0) {
             $listaErros['email'] = "Email já cadastrado.";
         }
@@ -77,18 +105,47 @@ function validarFormulario($post)
 
 $listaUfs = select_db("SELECT id, nome, sigla FROM uf ORDER BY nome ASC;");
 
+$pessoa = new Pessoa();
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
 
     if (isset($_GET['edit']) && $_GET['edit'] == 1
         && isset($_GET['id']) && $_GET['id']) {
-            $uf = select_one_db("SELECT id, nome, sigla FROM uf WHERE id = {$_GET['id']};");
+            // Busca a pessoa do banco de dados
+            $pessoaBd = select_one_db("
+                SELECT 
+                    pessoa.id AS id,
+                    pessoa.primeiro_nome AS primeiro_nome,
+                    pessoa.segundo_nome AS segundo_nome,
+                    pessoa.email AS email,
+                    pessoa.cpf AS cpf,
+                    pessoa.data_nascimento AS data_nascimento,
+                    pessoa.endereco AS endereco,
+                    pessoa.bairro AS bairro,
+                    pessoa.numero AS numero,
+                    pessoa.cep AS cep,
+                    pessoa.tipo AS tipo,
+                    pessoa.sexo AS sexo,
+                    pessoa.cidade_id AS cidade_id,
+                    uf.id AS uf_id
+                FROM pessoa 
+                    INNER JOIN cidade ON(cidade.id=pessoa.cidade_id) 
+                    INNER JOIN uf ON(uf.id=cidade.uf_id)
+                WHERE 
+                    pessoa.id = {$_GET['id']};
+            ");
+
+            $pessoa = new Pessoa($pessoaBd);
+            
         }
 
     include "cadastro-view.php";
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
+    $pessoa->setPost($_POST);
+
     // Utilizem o metodo validarFormularioSimples OU validarFormularioAvancado
     $listaErros = validarFormulario($_POST);
     //$listaErros = validarFormularioAvancado($_POST, ['nome', 'email']);
@@ -102,26 +159,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     } else if (isset($_POST['id']) && $_POST['id']) {
 
-        $sigla = strtoupper($_POST['sigla']);
+        $dataNascimentoBanco = $pessoa->data_nascimento->format('Y-m-d') . ' 00:00:00';
+
         // Executo o update
-        $sql = "UPDATE uf 
-            SET nome = '{$_POST['nome']}', 
-            sigla = '{$sigla}'
-            WHERE id = {$_POST['id']};
+        $sql = "UPDATE pessoa
+            SET
+                primeiro_nome = '{$pessoa->primeiro_nome}',
+                segundo_nome = '{$pessoa->segundo_nome}',
+                email = '{$pessoa->email}',
+                cpf = '{$pessoa->cpf}',
+                data_nascimento = '{$dataNascimentoBanco}',
+                tipo = {$pessoa->tipo},
+                endereco = '{$pessoa->endereco}',
+                cep = '{$pessoa->cep}',
+                bairro = '{$pessoa->bairro}',
+                numero = '{$pessoa->numero}',
+                cidade_id = {$pessoa->cidade_id},
+                sexo = '{$pessoa->sexo}'
+            WHERE id = {$pessoa->id};
         ";
         $alterado = update_db($sql);
 
-        alertSuccess("Sucesso.", "Estado {$_POST['nome']} alterado com sucesso.");
+        alertSuccess("Sucesso.", "Pessoa {$pessoa->getNomeCompleto()} alterada com sucesso.");
         
-        redirect("/modulo-estado/");
+        redirect("/modulo-pessoa/");
         
     } else {
-        $post = formatarPost($_POST);
+        //$post = formatarPost($_POST);
 
-        $cpfSemMascara = removerMascaraCpf($post['cpf']);
-
-        $dataNascimento = DateTime::createFromFormat('d/m/Y', $post['data_nascimento']);
-        $dataNascimentoBanco = $dataNascimento->format('Y-m-d') . ' 00:00:00';
+        $dataNascimentoBanco = $pessoa->data_nascimento->format('Y-m-d') . ' 00:00:00';
 
         $sql = "INSERT INTO pessoa (
             primeiro_nome,
@@ -134,19 +200,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             cep,
             bairro,
             numero,
-            cidade_id
+            cidade_id,
+            sexo
         ) VALUES (
-            '{$post['primeiro_nome']}',
-            '{$post['segundo_nome']}',
-            '{$post['email']}',
-            '{$cpfSemMascara}',
+            '{$pessoa->primeiro_nome}',
+            '{$pessoa->segundo_nome}',
+            '{$pessoa->email}',
+            '{$pessoa->cpf}',
             '{$dataNascimentoBanco}',
-            {$post['tipo']},
-            '{$post['endereco']}',
-            '{$post['cep']}',
-            '{$post['bairro']}',
-            '{$post['numero']}',
-            {$post['cidade']}
+            {$pessoa->tipo},
+            '{$pessoa->endereco}',
+            '{$pessoa->cep}',
+            '{$pessoa->bairro}',
+            '{$pessoa->numero}',
+            {$pessoa->cidade_id},
+            '{$pessoa->sexo}'
         );";
         
         $pessoaId = insert_db($sql);
