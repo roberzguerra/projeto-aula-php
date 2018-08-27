@@ -6,5 +6,5 @@ include "config.php";
 
 <h2>Subtitulo</h2>
 <script>
-window.location.href = '/modulo-cidade/';
+window.location.href = '/login/';
 </script>

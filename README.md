@@ -1,6 +1,10 @@
 # projeto-aula-php
 Projeto da aula de PHP na Flexxo.
 
+## Tema bootstrap utilizado
+https://startbootstrap.com/template-overviews/sb-admin/
+
+
 
 ## Criar o modulo-pessoa
 * Primeiro: apague a tabela pessoa caso exista:
