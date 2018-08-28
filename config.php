@@ -25,17 +25,19 @@ error_reporting(E_ALL);
 
 $SITE_URL = 'http://aula.com';
 
-$uri = $_SERVER['REQUEST_URI'];
 
+
+$uri = $_SERVER['REQUEST_URI'];
 // Validar LOGIN:
 if (isset($_COOKIE['login']) && $_COOKIE['login']) {
     // Usuario logado
     if (!$uri || $uri == '/') {
         redirect("/modulo-pessoa/");
     }
+    
 } else {
     // Manda para tela de login
-    if (!strpos($uri, '/login') == 0) {
+    if (strpos($uri, '/login') != 0 || strpos($uri, '/login') === false) {
         redirect("/login/");
     }
 }

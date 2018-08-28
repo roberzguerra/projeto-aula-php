@@ -2,11 +2,24 @@
 include '../comum/head.php';
 ?>
 <style type="text/css">
+footer.sticky-footer {
+        width: 100%;
+}
+
 @media (min-width: 992px) {
+    /* Aplica as regras CSS abaixo quando a tela tiver uma resolução
+     de no minimo 992px 
+    */
     footer.sticky-footer {
         width: 100%;
     }
 }
+@media (max-width: 2000px) {
+    /* Aplica as regras CSS abaixo quando a tela tiver uma resolução
+        de no maximo 2000px
+    */
+}
+
 </style>
 
  <div class="container">
@@ -16,13 +29,13 @@ include '../comum/head.php';
         <form action="/login/" method="POST">
             <div class="form-group">
                 <div class="form-label-group">
-                <label for="inputEmail">Email</label>
+                <label for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="Email" required="required" autofocus="autofocus">
                 </div>
             </div>
             <div class="form-group">
                 <div class="form-label-group">
-                <label for="inputPassword">Password</label>
+                <label for="senha">Senha</label>
                 <input type="password" name="senha" id="senha" class="form-control" placeholder="Senha" required="required">
                 </div>
             </div>

@@ -64,3 +64,12 @@ DROP TABLE pessoa
 
 
 
+# Tabela Usuário
+Colunas:
+* ID: inteiro;
+* Nome: string de 255 caracteres;
+* email: string de 255 caracteres;
+* senha: string de 255 caracteres para armazenar o hash MD5 da senha.
+* recuperar_senha:
+
+

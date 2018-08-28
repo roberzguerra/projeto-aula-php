@@ -110,3 +110,25 @@ CREATE TABLE pessoa (
 
 /* Adiciona coluna SEXO na tabela pessoa com valor padrão 'M' */
 ALTER TABLE pessoa ADD COLUMN sexo varchar(1) NOT NULL DEFAULT 'M';
+
+/* TABELA usuario */
+CREATE TABLE usuario (
+    id int(11) NOT NULL AUTO_INCREMENT,
+    nome varchar(255) NOT NULL,
+    email varchar(255) NOT NULL,
+    senha varchar(255) NOT NULL,
+    recuperar_senha varchar(255) NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (email)
+);
+
+/* CRIA O USUARIO rober como teste com a senha 1234 
+ o hash: 81dc9bdb52d04dc20036dbd8313ed055 equivale a senha 1234.
+*/
+INSERT INTO usuario (nome, email, senha, recuperar_senha)
+VALUES(
+    'Rober', 
+    'roberzguerra@gmail.com', 
+    '81dc9bdb52d04dc20036dbd8313ed055', 
+    null
+);
