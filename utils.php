@@ -1,4 +1,6 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 /**
  * Funções úteis do projeto.
  */
@@ -176,4 +178,42 @@ function formatarPost($post) {
     }
     return $post;
 }
+
+/**
+ * Envia um email de acordo com os parametros recebidos.
+ */
+function enviarEmail($emailDestinatario, $nomeDestinatario, $assunto, $corpo)
+{
+    $retorno = false;
+    try {
+        // Instancia a classe PHPMailer com as credenciais do email:
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = 'tls';
+        $mail->Username = 'rober.flexxo@gmail.com';
+        $mail->Password = 'Flexxo@2018';
+        $mail->Port = 587;
+
+        // email do remetente e nome do remetente
+        $mail->setFrom('rober.flexxo@gmail.com', "Nome do Site");
+        
+        // Email do Destinatario, nome do destinatario
+        $mail->addAddress($emailDestinatario, $nomeDestinatario);
+        $mail->isHTML(true);
+        // Assunto do email
+        $mail->Subject = $assunto;
+        // Corpo do email
+        $mail->Body = $corpo;
+
+        $retorno = $mail->send();
+
+    } catch (Exception $e) {
+        echo "Erro ao enviar email:";
+        echo $e->getMessage();
+    }
+    return $retorno;
+}
+
 ?>

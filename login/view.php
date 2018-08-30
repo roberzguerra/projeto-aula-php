@@ -48,7 +48,7 @@ footer.sticky-footer {
         </form>
         <div class="text-center">
         
-        <a class="d-block small mt-3" href="forgot-password.html">Esqueceu sua senha?</a>
+        <a class="d-block small mt-3" href=<?php echo $SITE_URL . "/recuperar-senha/"; ?>>Esqueceu sua senha?</a>
         </div>
     </div>
     </div>

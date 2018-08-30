@@ -62,14 +62,46 @@ DROP TABLE pessoa
   * MySQL Syntax
   &nbsp;
 
+# Utilizando o composer no windows:
+* Instalando o composer:
+```bash
+$ /c/xampp/php/php.exe -r "copy('https://getcomposer.org/installer
+', 'composer-setup.php');"
+
+$ /c/xampp/php/php.exe -r "copy('https://getcomposer.org/installer', 'composer-setu
+p.php');"
+
+$ /c/xampp/php/php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e0
+9ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9
+b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('
+composer-setup.php'); } echo PHP_EOL;"
+
+$ /c/xampp/php/php.exe -r "unlink('composer-setup.php');"
+```
+* Após a instalação será criado o arquivo composer.phar;
+* Agora execute o init e tecle ENTER para todas as opções solicitadas:
+```bash
+$ /c/xampp/php/php.exe composer.phar init
+```
+
+* Execute o composer install, para criar a pasta vendor do projeto:
+```bash
+$ /c/xampp/php/php.exe composer.phar install
+```
+
+* Será criado um arquivo chamado composer.json, dentro deste arquivo, em "require" adicione suas bibliotecas/pacotes desejados, como no exemplo abaixo:
+```json
+    "require": {
+        "phpmailer/phpmailer": "~6.0"
+    }
+```
+* Após adicionar os pacotes desejados, execute o composer update:
+```bash
+$ /c/xampp/php/php.exe composer.phar update
+```
+* Caso ocorra qualquer problema com os pacotes, você sempre pode remover completamente a pasta "vendor" e o arquivo "composer.lock" e executar novamente o composer update para baixar todos os pacotes do projeto.
 
 
-# Tabela Usuário
-Colunas:
-* ID: inteiro;
-* Nome: string de 255 caracteres;
-* email: string de 255 caracteres;
-* senha: string de 255 caracteres para armazenar o hash MD5 da senha.
-* recuperar_senha:
+
 
 

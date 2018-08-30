@@ -1,6 +1,7 @@
 <?php
 // Importar o phpMailer
 require '../vendor/autoload.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -16,7 +17,7 @@ $mail->Port = 587;
 
 // seta parametros para envio do email
 // Remetente
-$mail->setFrom('rober.flexxo@gmail.com');
+$mail->setFrom('rober.flexxo@gmail.com', 'Rober Flexxo');
 
 // Adiciona emails para enviar
 $mail->addAddress('roberzguerra@gmail.com', 'Rober Guerra');
@@ -33,7 +34,7 @@ $mail->isHTML(true);
 // Assunto do email
 $mail->Subject = 'Email Teste';
 // Corpo do email
-$mail->Body = 'Corpo do email com <strong> HTML </strong>';
+$mail->Body = "Corpo do email com <strong> HTML </strong>.";
 // Texto exibido acima do corpo do email
 //$mail->AltBody = 'texto acima do corpo';
 // Adiciona anexos

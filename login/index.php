@@ -1,12 +1,12 @@
 <?php
 include "../config.php";
 
-function logar($email, $senha)
+function logar($email, $senha, $site_hash, $site_url)
 {
     // senha md5 1234: 81dc9bdb52d04dc20036dbd8313ed055
     // verifica no banco
     // Quando for salvar a senha, gere o hash md5 adicionando mais strings na senha, exemplo: md5('CursoFlexoo'. $email . $senha)
-    $hashSenha = md5($senha);
+    $hashSenha = md5($site_hash . $senha);
     $usuario = select_one_db("SELECT senha FROM usuario WHERE email = '{$email}';"); 
     
     if ($usuario && $usuario->senha == $hashSenha) {
@@ -16,7 +16,7 @@ function logar($email, $senha)
         // 3 - tempo de validade time()+60*60*24*30 == 30 dias
         // 4 - Caminho "/" para valer em todo o site
         // 5 - nome do dominio
-        setcookie("login", $email, time()+60*60*24*30, "/", $SITE_URL);
+        setcookie("login", $email, time()+60*60*24*30, "/");
         return true;
     }
     return false;
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
-    if ($email && $senha && logar($email, $senha)) {
+    if ($email && $senha && logar($email, $senha, $SITE_HASH, $SITE_URL)) {
         redirect('/modulo-pessoa/');
     } else {
         $mensagemErro = "Email ou senha incorretos.";
