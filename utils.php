@@ -6,15 +6,6 @@ use PHPMailer\PHPMailer\Exception;
  */
 
 /**
- * Retorna a URL raiz do site atual;
- * 
- */
-function site_url()
-{
-    return $SITE_URL;
-}
-
-/**
  * Dump and Die : debugar codigo interrompendo a execução.
  */
 function dd($valor) 
