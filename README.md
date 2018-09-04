@@ -53,6 +53,13 @@ DROP TABLE pessoa
 * Criar Banco de dados aula_php_db
 * Criar usuario do banco aula_php_user
 * Executar o SQL do banco de dados para criar todas as tabelas.
+* Crie o arquivo credenciais.php na raiz do projeto, contendo as seguintes configuracoes do site:
+```php
+$config = [
+    'email_usuario' => 'email@email.com',
+    'email_senha'   => 'senhaDoEmail',
+];
+```
 
 * Extensões para o VS Code:
   * Code Spell Checker

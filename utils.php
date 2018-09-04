@@ -186,8 +186,8 @@ function enviarEmail($emailDestinatario, $nomeDestinatario, $assunto, $corpo)
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->SMTPSecure = 'tls';
-        $mail->Username = 'rober.flexxo@gmail.com';
-        $mail->Password = 'Flexxo@2018';
+        $mail->Username = get_credenciais('email_usuario');
+        $mail->Password = get_credenciais('usuario_senha');
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';
 

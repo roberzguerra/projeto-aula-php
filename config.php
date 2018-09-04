@@ -9,6 +9,13 @@ date_default_timezone_set('America/Sao_Paulo');
 // Importa o autoload da vendor
 require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
 
+function get_credenciais($valor)
+{
+    include 'credenciais.php';
+
+    return $config[$valor];
+}
+
 // Inclui arquivo de configuração e metodos de conexão com banco de dados.
 include 'db.php';
 
