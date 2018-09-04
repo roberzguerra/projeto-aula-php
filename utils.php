@@ -1,6 +1,5 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
 /**
  * Funções úteis do projeto.
  */
@@ -170,6 +169,10 @@ function formatarPost($post) {
     return $post;
 }
 
+// Sempre usar comandos "use" nas primeiras linhas do arquivo php.
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 /**
  * Envia um email de acordo com os parametros recebidos.
  */
@@ -186,9 +189,10 @@ function enviarEmail($emailDestinatario, $nomeDestinatario, $assunto, $corpo)
         $mail->Username = 'rober.flexxo@gmail.com';
         $mail->Password = 'Flexxo@2018';
         $mail->Port = 587;
+        $mail->CharSet = 'UTF-8';
 
         // email do remetente e nome do remetente
-        $mail->setFrom('rober.flexxo@gmail.com', "Nome do Site");
+        $mail->setFrom('rober.flexxo@gmail.com', "Rober Z Guerra");
         
         // Email do Destinatario, nome do destinatario
         $mail->addAddress($emailDestinatario, $nomeDestinatario);
@@ -204,6 +208,7 @@ function enviarEmail($emailDestinatario, $nomeDestinatario, $assunto, $corpo)
         echo "Erro ao enviar email:";
         echo $e->getMessage();
     }
+    
     return $retorno;
 }
 

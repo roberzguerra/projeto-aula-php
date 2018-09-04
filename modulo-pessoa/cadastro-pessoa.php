@@ -136,8 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     pessoa.id = {$_GET['id']};
             ");
 
-            $pessoa = new Pessoa($pessoaBd);
+            //$pessoa = new Pessoa($pessoaBd);
             
+
         }
 
     include "cadastro-view.php";

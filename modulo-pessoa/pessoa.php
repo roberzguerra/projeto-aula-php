@@ -20,21 +20,31 @@ class Pessoa extends ModelBase
     public $uf_id;
     public $cidade_id;
     
+    
+    
+    /**
+     * Construtor da classe.
+     * Recebe todos os parametros desejados no momento da instancia da classe,
+     * exemplo de instancia de classe:
+     * $pessoa = new Pessoa($pessoaBd);
+     */
     public function __construct($pessoaDb=null)
     {
         if ($pessoaDb) {
-            $this->id = $pessoaDb->id;
+            $this->id = (int) $pessoaDb->id;
             $this->primeiro_nome = $pessoaDb->primeiro_nome;
             $this->segundo_nome = $pessoaDb->segundo_nome;
             $this->email = $pessoaDb->email;
-            $this->cpf = $pessoaDb->cpf;
+            $this->cpf = (string) $pessoaDb->cpf;
             $this->endereco = $pessoaDb->endereco;
             $this->bairro = $pessoaDb->bairro;
             $this->numero = $pessoaDb->numero;
             $this->cep = $pessoaDb->cep;
-            $this->tipo = $pessoaDb->tipo;
+            $this->tipo = (int) $pessoaDb->tipo;
             $this->sexo = $pessoaDb->sexo;
 
+            // Data de nascimento do banco veio no formato '20010-10-01 00:00:00'
+            // Entao transformamos ela em um objeto DateTime
             $this->data_nascimento = DateTime::createFromFormat('Y-m-d H:i:s', $pessoaDb->data_nascimento);
 
             if ($pessoaDb->uf_id) {
@@ -71,6 +81,7 @@ class Pessoa extends ModelBase
 
     public function setPost($post) 
     {
+        // Chama o metodo setPost da classe pai (ModelBase)
         parent::setPost($post);
 
         if (isset($post['data_nascimento'])) {
