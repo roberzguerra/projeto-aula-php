@@ -64,6 +64,10 @@ include "../comum/side-menu.php";
 				<div class="form-group">
 					<div class="form-row ">
 						<div class="col-md-12">
+							<?php if ($pessoa->imagem_perfil) { ?>
+								<img style="width: 100px; height: auto;" src="<?php echo site_url($pessoa->getImagemPerfilCaminho()); ?>" />
+							<?php } ?>
+
 							<label for="arquivo">Imagem de perfil</label>
 							<input type="file" name="arquivo" id="arquivo" value="" />
 							<?php echo exibirErro($listaErros, 'arquivo'); ?>

@@ -31,7 +31,12 @@ class Pessoa extends ModelBase
      */
     public function __construct($pessoaDb=null)
     {
+
         if ($pessoaDb) {
+
+            $listaAtributos = get_object_vars($pessoaDb);
+            parent::setPost($listaAtributos);
+            /*
             $this->id = (int) $pessoaDb->id;
             $this->primeiro_nome = $pessoaDb->primeiro_nome;
             $this->segundo_nome = $pessoaDb->segundo_nome;
@@ -43,15 +48,18 @@ class Pessoa extends ModelBase
             $this->cep = $pessoaDb->cep;
             $this->tipo = (int) $pessoaDb->tipo;
             $this->sexo = $pessoaDb->sexo;
-
+            $this->imagem_perfil = $pessoaDb->imagem_perfil;
+            */
             // Data de nascimento do banco veio no formato '20010-10-01 00:00:00'
             // Entao transformamos ela em um objeto DateTime
-            $this->data_nascimento = DateTime::createFromFormat('Y-m-d H:i:s', $pessoaDb->data_nascimento);
+            if (array_key_exists('data_nascimento', $listaAtributos)) {
+                $this->data_nascimento = DateTime::createFromFormat('Y-m-d H:i:s', $pessoaDb->data_nascimento);
+            }
 
-            if ($pessoaDb->uf_id) {
+            if (array_key_exists('uf_id', $listaAtributos)) {
                 $this->uf_id = $pessoaDb->uf_id;
             }
-            if ($pessoaDb->cidade_id) {
+            if (array_key_exists('cidade_id', $listaAtributos)) {
                 $this->cidade_id = $pessoaDb->cidade_id;
             }
         }
@@ -96,6 +104,17 @@ class Pessoa extends ModelBase
         }
         if (isset($post['cidade'])) {
             $this->cidade_id = $post['cidade'];
+        }
+    }
+
+    function getImagemPerfilCaminho()
+    {
+        if ($this->imagem_perfil) {
+            return '/uploads/perfil/' . $this->imagem_perfil;
+        } else {
+            return null;
+            // Caso deseje exibir uma imagem padrao quando nao houver imagem_perfil:
+            // return '/imagens/imagem-padrao.jpg';
         }
     }
 }

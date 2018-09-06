@@ -15,7 +15,7 @@ class ModelBase
         'segundo_nome'
         */
         foreach($post as $chave => $valor) {
-            $this->{$chave} = $valor;
+            $this->{$chave} = filtrarSql($valor);
         }
     }
 }

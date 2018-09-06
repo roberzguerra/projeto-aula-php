@@ -35,6 +35,7 @@ include '../comum/side-menu.php';
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Perfil</th>
                 <th><a href="?order=primeiro_nome&order_type=<?php echo (isset($_GET['order_type']) && $_GET['order_type'] == 'ASC') ? 'DESC' : 'ASC'; ?>">Nome</a></th>
                 <th><a href="?order=cpf&order_type=<?php echo (isset($_GET['order_type']) && $_GET['order_type'] == 'ASC') ? 'DESC' : 'ASC'; ?>">CPF</a></th>
                 <th><a href="?order=email&order_type=<?php echo (isset($_GET['order_type']) && $_GET['order_type'] == 'ASC') ? 'DESC' : 'ASC'; ?>">Email</a></th>
@@ -45,7 +46,12 @@ include '../comum/side-menu.php';
             <?php foreach($listaPessoas as $pessoa) { ?>
                 <tr>
                     <td><?php echo $pessoa->id; ?></td>
-                    <td><?php echo "{$pessoa->primeiro_nome} {$pessoa->segundo_nome}"; ?></td>
+                    <td>
+                        <?php if ($pessoa->imagem_perfil) { ?>
+                            <img style="width: 40px; height: auto;" src="<?php echo site_url($pessoa->getImagemPerfilCaminho()); ?>" />
+                        <?php } ?>
+                    </td>
+                    <td><?php echo $pessoa->getNomeCompleto(); ?></td>
                     <td><?php echo adicionarMascaraCpf($pessoa->cpf); ?></td>
                     <td><?php echo $pessoa->email;?></td>
                     <td>

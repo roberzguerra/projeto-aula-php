@@ -206,6 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     pessoa.tipo AS tipo,
                     pessoa.sexo AS sexo,
                     pessoa.cidade_id AS cidade_id,
+                    pessoa.imagem_perfil,
                     uf.id AS uf_id
                 FROM pessoa 
                     INNER JOIN cidade ON(cidade.id=pessoa.cidade_id) 
@@ -215,7 +216,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             ");
 
             $pessoa = new Pessoa($pessoaBd);
-            
         }
 
     include "cadastro-view.php";
@@ -233,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         $retornoUpload = uploadImagemPerfil($_FILES, $nomeImagem);
         if ($retornoUpload['status'] === true) {
-            $pessoa->imagem_perfil = $retorno['nome_arquivo'];
+            $pessoa->imagem_perfil = $retornoUpload['nome_arquivo'];
         } else {
             $listaErros['arquivo'] = $retornoUpload['mensagem'];
         }
@@ -274,8 +274,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 imagem_perfil = '{$pessoa->imagem_perfil}'
             WHERE id = {$pessoa->id};
         ";
+        
         $alterado = update_db($sql);
-
+        
         alertSuccess("Sucesso.", "Pessoa {$pessoa->getNomeCompleto()} alterada com sucesso.");
         
         redirect("/modulo-pessoa/");

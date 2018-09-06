@@ -1,6 +1,7 @@
 <?php
 
 include '../config.php';
+include 'pessoa.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $listaErros = [];
@@ -56,12 +57,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             primeiro_nome,
             segundo_nome,
             cpf,
-            email
+            email,
+            imagem_perfil
         FROM pessoa
         ORDER BY {$order_by}
         LIMIT {$limite}
         OFFSET {$offset};
     ");
+
+    if (count($listaPessoas) > 0) {
+        foreach($listaPessoas as $chave => $pessoaBd) {
+            $listaPessoas[$chave] = new Pessoa($pessoaBd);
+        }
+    }
+
     
     include "list.php";
 
