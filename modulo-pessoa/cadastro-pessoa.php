@@ -7,6 +7,84 @@ $data = DateTime::createFromFormat('d/m/Y H:i:s', '10/08/1990 00:00:00');
 dd($data->format('Y-m-d H:i:s.u'));
 */
 
+function uploadImagemPerfil($file, $novoNome='', $diretorio='/uploads/perfil/')
+{
+    $retorno = [
+        'status' => false,
+        'mensagem' => 'Erro ao enviar o arquivo.',
+        'nome_arquivo' => '',
+    ];
+
+    // Pasta onde o arquivo vai ser salvo
+    $configUpload['pasta'] = $_SERVER['DOCUMENT_ROOT'] . $diretorio;
+    
+    // Tamanho máximo do arquivo (em Bytes)
+    $configUpload['tamanho'] = 1024 * 1024 * 4; // Total : 4Mb
+    
+    // Array com as extensões permitidas
+    $configUpload['extensoes'] = array('jpg','jpeg', 'png');
+    
+    // Renomeia o arquivo? (Se true, o arquivo será salvo como .jpg e um nome único)
+    $configUpload['renomeia'] = true;
+    
+    // Array com os tipos de erros de upload do PHP
+    $configUpload['erros'] = [
+        0 => 'Não houve erro',
+        1 => 'O arquivo no upload é maior do que o limite do PHP',
+        2 => 'O arquivo ultrapassa o limite de tamanho especifiado no HTML',
+        3 => 'O upload do arquivo foi feito parcialmente',
+        4 => 'Não foi feito o upload do arquivo',
+    ];
+    
+    // Verifica se houve algum erro com o upload. 
+    // Se sim, exibe a mensagem do erro
+    if ($file['arquivo']['error'] != 0) {
+        $retorno['mensagem'] = "Não foi possível fazer o upload, erro:<br />" . $configUpload['erros'][$file['arquivo']['error']];
+        return $retorno;
+    }
+    
+    // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
+
+    // Faz a verificação da extensão do arquivo
+    $arrayNome = explode('.', $file['arquivo']['name']);
+    $extensao = strtolower($arrayNome[ count($arrayNome)-1 ]);
+    
+    if (array_search($extensao, $configUpload['extensoes']) === false) {
+        $retorno['mensagem'] = "Envie arquivos nas extensões jpg, jpeg ou png.";
+
+    } else if ( $configUpload['tamanho'] < $file['arquivo']['size']) {
+        // Faz a verificação do tamanho do arquivo
+        $retorno['mensagem'] = "Envie arquivos de até 4MB.";
+    } else {
+        // O arquivo passou em todas as verificações, agora movemos para a pasta desejada
+        // Primeiro verifica se deve trocar o nome do arquivo
+        if ($configUpload['renomeia'] == true) {
+            // Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
+            if ($novoNome) {
+                $nomeFinal = $novoNome.'.'.$extensao;
+            } else {
+                $nomeFinal = time().'.'.$extensao;
+            }
+        } else {
+            // Mantém o nome original do arquivo
+            $nomeFinal = $file['arquivo']['name'];
+        }
+    
+        // Depois verifica se é possível mover o arquivo para a pasta escolhida
+        if (move_uploaded_file($file['arquivo']['tmp_name'], $configUpload['pasta'] . $nomeFinal)) {
+            // Upload efetuado com sucesso, exibe uma mensagem e um link para o arquivo
+            $retorno['mensagem'] = "Arquivo enviado com sucesso!";
+            $retorno['nome_arquivo'] = $nomeFinal;
+            $retorno['status'] = true;
+        } else {
+            // Não foi possível fazer o upload
+            $retorno['mensagem'] = "Não foi possível enviar o arquivo, tente novamente.";
+        }
+    
+    }
+
+    return $retorno;
+}
 
 /**
  * Valida formulario simples
@@ -136,9 +214,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     pessoa.id = {$_GET['id']};
             ");
 
-            //$pessoa = new Pessoa($pessoaBd);
+            $pessoa = new Pessoa($pessoaBd);
             
-
         }
 
     include "cadastro-view.php";
@@ -146,9 +223,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $pessoa->setPost($_POST);
+    // Iicializo lista erros
+    $listaErros = [];
+
+    if ($_FILES) {
+        // Converte o nome da pessoa em caracteres utilizaveis como URL
+        // para salvar a imagem com novo nome
+        $nomeImagem = slugify($pessoa->getNomeCompleto() . '-' . $pessoa->id);
+
+        $retornoUpload = uploadImagemPerfil($_FILES, $nomeImagem);
+        if ($retornoUpload['status'] === true) {
+            $pessoa->imagem_perfil = $retorno['nome_arquivo'];
+        } else {
+            $listaErros['arquivo'] = $retornoUpload['mensagem'];
+        }
+        
+    }
 
     // Utilizem o metodo validarFormularioSimples OU validarFormularioAvancado
-    $listaErros = validarFormulario($_POST);
+    // array_merge mescla o primeiro array com o segundo
+    $listaErros = array_merge($listaErros, validarFormulario($_POST));
     //$listaErros = validarFormularioAvancado($_POST, ['nome', 'email']);
 
     if (isset($_POST['id']) && $_POST['id'] )  {
@@ -176,7 +270,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 bairro = '{$pessoa->bairro}',
                 numero = '{$pessoa->numero}',
                 cidade_id = {$pessoa->cidade_id},
-                sexo = '{$pessoa->sexo}'
+                sexo = '{$pessoa->sexo}',
+                imagem_perfil = '{$pessoa->imagem_perfil}'
             WHERE id = {$pessoa->id};
         ";
         $alterado = update_db($sql);
@@ -202,7 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             bairro,
             numero,
             cidade_id,
-            sexo
+            sexo,
+            imagem_perfil
         ) VALUES (
             '{$pessoa->primeiro_nome}',
             '{$pessoa->segundo_nome}',
@@ -215,7 +311,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             '{$pessoa->bairro}',
             '{$pessoa->numero}',
             {$pessoa->cidade_id},
-            '{$pessoa->sexo}'
+            '{$pessoa->sexo}',
+            '{$pessoa->imagem_perfil}'
         );";
         
         $pessoaId = insert_db($sql);

@@ -132,3 +132,7 @@ VALUES(
     '81dc9bdb52d04dc20036dbd8313ed055', 
     null
 );
+
+/* Alterar tabela pessoa para adicionar imagem do perfil */
+ALTER TABLE pessoa ADD COLUMN imagem_perfil varchar(255) NULL;
+

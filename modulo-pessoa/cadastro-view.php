@@ -22,7 +22,7 @@ include "../comum/side-menu.php";
 		</div>
 
 		<div class="card-body">
-			<form action="<?php echo $SITE_URL . "/modulo-pessoa/cadastro-pessoa.php"; ?>" id="form-cadastro" method="POST">
+			<form action="<?php echo $SITE_URL . "/modulo-pessoa/cadastro-pessoa.php"; ?>" id="form-cadastro" method="POST" enctype="multipart/form-data" >
 				<!-- O input hidden "id" serve para enviar o ID da pessoa que 
 					estamos editando para o PHP saber qual registro ele precisa 
 					alterar. 
@@ -57,6 +57,16 @@ include "../comum/side-menu.php";
 							<label for="segundo_nome">Sobrenome</label>
 							<input class="form-control" name="segundo_nome" id="segundo_nome" placeholder="Sobrenome" type="text" value="<?php echo $pessoa->segundo_nome; ?>"  />
 							<?php echo exibirErro($listaErros, 'segundo_nome'); ?>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="form-row ">
+						<div class="col-md-12">
+							<label for="arquivo">Imagem de perfil</label>
+							<input type="file" name="arquivo" id="arquivo" value="" />
+							<?php echo exibirErro($listaErros, 'arquivo'); ?>
 						</div>
 					</div>
 				</div>

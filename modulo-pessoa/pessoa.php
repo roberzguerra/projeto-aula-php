@@ -15,6 +15,7 @@ class Pessoa extends ModelBase
     public $cep;
     public $tipo;
     public $sexo;
+    public $imagem_perfil;
 
     // Chaves estrangeiras
     public $uf_id;
