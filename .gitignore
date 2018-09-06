@@ -1,3 +1,4 @@
 /vendor/
-#/uploads/
+/uploads/perfil/*
+!/uploads/perfil/.gitkeep
 credenciais.php
